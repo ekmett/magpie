@@ -21,7 +21,6 @@ object category {
       override def dual : category[hom.set.dual[hom.set.dual[h]]] = duality[h](c)
     }
   }
-
   trait product[m<:hom.set,n<:hom.set] extends 
         precategory.product[m,n] with 
         category[hom.set.product[m,n]] with 
@@ -29,11 +28,8 @@ object category {
     def _1: category[m]
     def _2: category[n]
     // type h = hom.set.product[m,n] -- defined in precategory.product
-    def id[A>:h#inf<:h#sup]: h#hom[A,A] = // hom.product[m,n,A,A]
-      typed.product(_1.id[A#_1],_2.id[A#_2])
-    // TODO: override def dual : product[hom.set.dual[m],hom.set.dual[n]]
-    override def dual =
-        product.duality[m,n](product[hom.set.dual[m],hom.set.dual[n]](_1.dual,_2.dual))
+    def id[A>:h#inf<:h#sup]: h#hom[A,A] = typed.product(_1.id[A#_1],_2.id[A#_2])
+    override def dual = product.duality[m,n](product[hom.set.dual[m],hom.set.dual[n]](_1.dual,_2.dual))
   } 
   object product {
     def apply[m<:hom.set,n<:hom.set](m: category[m], n: category[n]): product[m,n] = new product[m,n] {
