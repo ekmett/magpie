@@ -42,6 +42,14 @@ object hom {
       type hom[a>:inf<:sup,b>:inf<:sup] = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]]
     }
     object product { 
+      def hom[
+        x<:set,y<:set,
+        a>:typed.product[x#inf,y#inf]<:typed.product[x#sup,y#sup],
+        b>:typed.product[x#inf,y#inf]<:typed.product[x#sup,y#sup]
+      ] (
+        l: x#hom[a#_1,b#_1],
+        r: y#hom[a#_2,b#_2]
+      ) = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]](l,r)
       /** hom.set.product.duality: another bald-faced assertion about duality. */
       def duality[x <: set, y <: set] : subtype[Nothing,set,product[dual[x],dual[y]],dual[product[x,y]]] = 
         subtype.refl[product[dual[x],dual[y]]].asInstanceOf[subtype[Nothing,set, product[dual[x],dual[y]], dual[product[x,y]]]]
