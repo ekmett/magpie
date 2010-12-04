@@ -69,8 +69,3 @@ object functor {
     }
   }
 }
-
-/* TODO: a more correct duality:
- hom.set.duality[cod].inverse.subst[({type λ[x<:hom.set]=functor[dom,x,f]===functor[dual[dual[dom]],dual[dual[cod]],f]})#λ](hom.set.duality[dom].inverse.subst[({type λ[x<:hom.set]=functor[x,dual[dual[cod]],f]===functor[dual[dual[dom]],dual[dual[cod]],f]})#λ](refl[functor[dual[dual[dom]],dual[dual[cod]],f]]))
-*/
-

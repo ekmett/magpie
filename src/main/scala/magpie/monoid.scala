@@ -2,7 +2,6 @@ package magpie
 
 trait monoid[m] extends category[hom.set.singleton[m]] with semigroup[m] with unital[m] {
   final def id[a>:m<:m] = zero
-  final def compose[a>:m<:m,b>:m<:m,c>:m<:m](f: m, g: m) : m = add(f,g)
   override def dual : monoid[m] = monoid.op(this)
 }
 
@@ -28,3 +27,4 @@ object monoid {
     def zero = num.one
   }
 }
+

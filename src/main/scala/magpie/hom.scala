@@ -9,6 +9,7 @@ object hom {
     type sup >: inf
     type hom[_>:inf<:sup,_>:inf<:sup] 
   }
+
   object set {
     type dual[h<:set] = set { 
       type inf = h#inf
@@ -28,5 +29,21 @@ object hom {
     /** hack to witness the equality of a hom-set to its dual dual */
     def duality[h<:set] : equality[Nothing,set,h,dual[dual[h]]] = 
       refl[h].asInstanceOf[equality[Nothing,set,h,dual[dual[h]]]]
+
+    type product[x<:set,y<:set] = set { 
+      type inf = phantom.product[x#inf,y#inf]
+      type sup = phantom.product[x#sup,y#sup]
+      type hom[a>:inf<:sup,b>:inf<:sup] = hom.product[x,y,a,b]
+    }
   }
+
+  case class product[
+    x<:hom.set,
+    y<:hom.set,
+    a>:phantom.product[x#inf,y#inf]<:phantom.product[x#sup,y#sup],
+    b>:phantom.product[x#inf,y#inf]<:phantom.product[x#sup,y#sup]
+  ](
+    _1: x#hom[a#_1,b#_1],
+    _2: y#hom[a#_2,b#_2]
+  ) extends phantom.product[x#hom[a#_1,b#_1],y#hom[a#_2,b#_2]]
 }

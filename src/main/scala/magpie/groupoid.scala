@@ -9,7 +9,7 @@ object groupoid {
   import magpie.equality._
 
   def duality[h<:hom.set] : groupoid[h] === groupoid[hom.set.dual[hom.set.dual[h]]] = 
-     hom.set.duality[h].inverse.subst[({type λ[x<:hom.set] = groupoid[x] === groupoid[hom.set.dual[hom.set.dual[h]]]})#λ](refl)
+     hom.set.duality[h].lift[Nothing,Any,({type λ[x<:hom.set] = groupoid[x]})#λ]
 
   trait op[h <: hom.set] extends groupoid[hom.set.dual[h]] with category.op[h] { 
      def inv[a>:h#inf<:h#sup,b>:h#inf<:h#sup](f: h#hom[b,a]) : h#hom[a,b] = dual.inv[b,a](f)

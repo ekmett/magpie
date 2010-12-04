@@ -1,8 +1,10 @@
 package magpie
 
-trait magma[m] {
+trait magma[m] extends precategory[hom.set.singleton[m]] {
+  final def compose[a>:m<:m,b>:m<:m,c>:m<:m](f: m, g: m) : m = add(f,g)
   def add(a: m, b: m): m
-  def dual : magma[m] = magma.op(this)
+  override def dual : magma[m] = magma.op(this)
+  def *[n](that: magma[n]) : magma.product[m,n] = magma.product[m,n](this,that)
 }
 
 object magma {
@@ -14,10 +16,22 @@ object magma {
   trait op[m] extends magma[m] { 
     def add(a: m, b: m) = dual.add(b,a)
   }
-
   object op { 
     def apply[m](c : magma[m]) : op[m] = new op[m] {
       override def dual : magma[m] = c
+    }
+  }
+
+  trait product[m,n] extends magma[(m,n)] with phantom.product[magma[m], magma[n]] {
+    def _1: magma[m]
+    def _2: magma[n]
+    def add(a: (m,n), b: (m,n)): (m,n) = (_1.add(a._1,b._1),_2.add(a._2,b._2))
+    override def dual: magma.product[m,n] = magma.product[m,n](_1.dual,_2.dual)
+  } 
+  object product {
+    def apply[m,n](m: magma[m], n: magma[n]): product[m,n] = new product[m,n] {
+      def _1: magma[m] = m
+      def _2: magma[n] = n
     }
   }
 }
