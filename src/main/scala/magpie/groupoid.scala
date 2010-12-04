@@ -8,7 +8,6 @@ trait groupoid[h <: hom.set] extends category[h] {
 
 object groupoid {
   import magpie.equality.{ === } 
-  import magpie.subtype.{ <~< }
 
   def duality[h<:hom.set] : groupoid[h] === groupoid[hom.set.dual[hom.set.dual[h]]] = 
      hom.set.duality[h].lift[Nothing,Any,({type λ[x<:hom.set] = groupoid[x]})#λ]
@@ -47,6 +46,7 @@ object groupoid {
       def _1: groupoid[m] = m
       def _2: groupoid[n] = n
     }
+    import magpie.subtype.{ <~< }
     def duality[m<:hom.set,n<:hom.set] 
     : groupoid[hom.set.product[hom.set.dual[m],hom.set.dual[n]]] <~<
       groupoid[hom.set.dual[hom.set.product[m,n]]] = 

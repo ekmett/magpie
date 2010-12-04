@@ -8,7 +8,6 @@ trait category[h <: hom.set] extends precategory[h] {
   
 object category { 
   import equality.{ === } 
-  import subtype.{ <~< }
   def duality[h<:hom.set] : category[h] === category[hom.set.dual[hom.set.dual[h]]] = 
      hom.set.duality[h].lift[Nothing,Any,({type λ[x<:hom.set] = category[x]})#λ]
 
@@ -36,6 +35,7 @@ object category {
       def _1: category[m] = m
       def _2: category[n] = n
     }
+    import subtype.{ <~< }
     def duality[m<:hom.set,n<:hom.set] 
     : category[hom.set.product[hom.set.dual[m],hom.set.dual[n]]] <~<
       category[hom.set.dual[hom.set.product[m,n]]] = 

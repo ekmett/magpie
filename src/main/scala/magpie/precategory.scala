@@ -15,7 +15,6 @@ trait precategory[h <: hom.set] {
   
 object precategory { 
   import equality.{ === } 
-  import subtype.{ <~< }
 
   def duality[h<:hom.set] : precategory[h] === precategory[hom.set.dual[hom.set.dual[h]]] = 
      hom.set.duality[h].lift[Nothing,Any,({type λ[x<:hom.set] = precategory[x]})#λ]
@@ -50,6 +49,7 @@ object precategory {
       def _1: precategory[m] = m
       def _2: precategory[n] = n
     }
+    import subtype.{ <~< }
     def duality[m<:hom.set,n<:hom.set] 
     : precategory[hom.set.product[hom.set.dual[m],hom.set.dual[n]]] <~<
       precategory[hom.set.dual[hom.set.product[m,n]]] = 
