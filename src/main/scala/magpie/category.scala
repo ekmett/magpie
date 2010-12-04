@@ -22,9 +22,10 @@ object category {
     }
   }
 
-  trait product[m<:hom.set,n<:hom.set] extends precategory.product[m,n] 
-   with category[hom.set.product[m,n]] 
-   with phantom.product[category[m], category[n]] {
+  trait product[m<:hom.set,n<:hom.set] extends 
+        precategory.product[m,n] with 
+        category[hom.set.product[m,n]] with 
+        phantom.product[category[m], category[n]] {
     def _1: category[m]
     def _2: category[n]
     // type h = hom.set.product[m,n] -- defined in precategory.product

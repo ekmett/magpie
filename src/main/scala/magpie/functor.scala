@@ -1,6 +1,5 @@
 package magpie
 
-// -dom,+cod
 trait functor[dom<:hom.set,cod<:hom.set,f[_>:dom#inf<:dom#sup]>:cod#inf<:cod#sup] {
   def dom : category[dom]
   def cod : category[cod]

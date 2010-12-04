@@ -3,7 +3,10 @@ package magpie
 /** currently these play the roles of both hom-classes and hom-sets */
 object hom { 
   import equality._
-  /** hom-sets are modeled as a range of types. sealed to ensure the validity of the duality laws */
+  /** hom-sets are modeled as a range of types. 
+    * sealed to ensure the validity of the duality laws 
+    * and that it is never actually constructed
+    */
   sealed trait set { self => 
     type inf
     type sup >: inf
@@ -16,6 +19,7 @@ object hom {
       type sup = h#sup
       type hom[a>:inf<:sup,b>:inf<:sup] = h#hom[b,a]
     }
+
     /** hom.set.of: convenient accessor to construct a particular hom.set */
     type of[l,h>:l,c[_>:l<:h,_>:l<:h]] = set {
       type inf = l
@@ -43,16 +47,4 @@ object hom {
         subtype.refl[product[dual[x],dual[y]]].asInstanceOf[subtype[Nothing,set, product[dual[x],dual[y]], dual[product[x,y]]]]
     }
   }
-
-  /* hom.product provides a concrete implementation of the product of two hom-set morphisms 
-  case class product[
-    x<:hom.set,
-    y<:hom.set,
-    a>:phantom.product[x#inf,y#inf]<:phantom.product[x#sup,y#sup],
-    b>:phantom.product[x#inf,y#inf]<:phantom.product[x#sup,y#sup]
-  ](
-    _1: x#hom[a#_1,b#_1],
-    _2: y#hom[a#_2,b#_2]
-  ) extends phantom.product[x#hom[a#_1,b#_1],y#hom[a#_2,b#_2]]
-  */
 }
