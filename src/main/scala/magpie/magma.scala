@@ -8,7 +8,7 @@ trait magma[m] extends precategory[hom.set.singleton[m]] {
 }
 
 object magma {
-  /** A construct a monoid from a zero and a binary function */
+  /** Construct a magma from a binary function */
   def apply[m](f:(m,m)=>m): magma[m] = new magma[m] { 
     def add(a: m, b: m):m = f(a,b)
   }
