@@ -16,11 +16,6 @@ object group {
       override def dual : group[m] = c
     }
   }
-  def addition[n](implicit num: Numeric[n]) : group[n] = new group[n] {
-    def add(a:n,b:n) = num.plus(a,b)
-    def zero = num.zero
-    def negate(a:n) = num.negate(a)
-  }
 
   trait product[m,n] 
     extends monoid.product[m,n]
@@ -42,6 +37,17 @@ object group {
       def _1: group[m] = m
       def _2: group[n] = n
     }
+  }
+  def addition[n](implicit num: Numeric[n]) : group[n] = new group[n] {
+    def add(a:n,b:n) = num.plus(a,b)
+    def zero = num.zero
+    def negate(a:n) = num.negate(a)
+  }
+
+  def trivial(e:Unit) : group[Unit] = new group[Unit] {
+    def add(a:Unit,b:Unit) = ()
+    def zero = ()
+    def negate(a:Unit) = ()
   }
 }
 

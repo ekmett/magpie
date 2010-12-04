@@ -51,6 +51,7 @@ object functor {
       B>:a#inf<:a#sup
     ](h: a#hom[A,B]): c#hom[f[g[A]],f[g[B]]] = f(g(h))
   }
+
   object composition { 
     def apply[
       a<:hom.set,

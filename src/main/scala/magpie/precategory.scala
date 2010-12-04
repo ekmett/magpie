@@ -1,5 +1,12 @@
 package magpie
 
+/** 
+ * A pre-category is defined to provide a possibly non-associative composition 
+ * This terminology collides with another 'precategory' notion which usually just provides
+ * arrows and doesn't even provide composition, relying instead upon the construction of paths.
+ *
+ * We choose to start here instead.
+ */ 
 trait precategory[h <: hom.set] {
   def compose[A>:h#inf<:h#sup, B>:h#inf<:h#sup, C>:h#inf<:h#sup](f : h#hom[B,C], g: h#hom[A,B]) : h#hom[A,C]
   def dual : precategory[hom.set.dual[h]] = precategory.op(this)

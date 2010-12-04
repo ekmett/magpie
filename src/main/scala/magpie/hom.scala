@@ -14,6 +14,7 @@ object hom {
   }
 
   object set {
+    /** the dual of a hom-set is a hom-set */
     type dual[h<:set] = set { 
       type inf = h#inf
       type sup = h#sup
@@ -40,7 +41,6 @@ object hom {
       type sup = typed.product[x#sup,y#sup]
       type hom[a>:inf<:sup,b>:inf<:sup] = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]]
     }
-
     object product { 
       /** hom.set.product.duality: another bald-faced assertion about duality. */
       def duality[x <: set, y <: set] : subtype[Nothing,set,product[dual[x],dual[y]],dual[product[x,y]]] = 
