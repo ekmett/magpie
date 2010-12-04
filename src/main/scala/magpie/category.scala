@@ -28,7 +28,8 @@ object category {
     def _1: category[m]
     def _2: category[n]
     // type h = hom.set.product[m,n] -- defined in precategory.product
-    def id[A>:h#inf<:h#sup]: h#hom[A,A] = hom.product[m,n,A,A](_1.id[A#_1],_2.id[A#_2])
+    def id[A>:h#inf<:h#sup]: h#hom[A,A] = // hom.product[m,n,A,A]
+      typed.product(_1.id[A#_1],_2.id[A#_2])
     // TODO: override def dual : product[hom.set.dual[m],hom.set.dual[n]]
     override def dual =
         product.duality[m,n](product[hom.set.dual[m],hom.set.dual[n]](_1.dual,_2.dual))

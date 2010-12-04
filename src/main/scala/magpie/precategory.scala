@@ -30,7 +30,8 @@ object precategory {
     def _2: precategory[n]
     type h = hom.set.product[m,n]
     def compose[A>:h#inf<:h#sup, B>:h#inf<:h#sup, C>:h#inf<:h#sup](f : h#hom[B,C], g: h#hom[A,B]) : h#hom[A,C] = 
-     hom.product[m,n,A,C](
+     // hom.product[m,n,A,C]
+     typed.product(
        _1.compose[A#_1,B#_1,C#_1](f._1,g._1),
        _2.compose[A#_2,B#_2,C#_2](f._2,g._2)
      )

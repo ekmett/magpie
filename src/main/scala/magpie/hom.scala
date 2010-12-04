@@ -32,9 +32,9 @@ object hom {
 
     /** hom.set.product: the product of two hom-sets */
     type product[x<:set,y<:set] = set { 
-      type inf = phantom.product[x#inf,y#inf]
-      type sup = phantom.product[x#sup,y#sup]
-      type hom[a>:inf<:sup,b>:inf<:sup] = hom.product[x,y,a,b]
+      type inf = typed.product[x#inf,y#inf]
+      type sup = typed.product[x#sup,y#sup]
+      type hom[a>:inf<:sup,b>:inf<:sup] = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]]
     }
 
     object product { 
@@ -44,7 +44,7 @@ object hom {
     }
   }
 
-  /* hom.product provides a concrete implementation of the product of two hom-set morphisms */
+  /* hom.product provides a concrete implementation of the product of two hom-set morphisms 
   case class product[
     x<:hom.set,
     y<:hom.set,
@@ -54,4 +54,5 @@ object hom {
     _1: x#hom[a#_1,b#_1],
     _2: y#hom[a#_2,b#_2]
   ) extends phantom.product[x#hom[a#_1,b#_1],y#hom[a#_2,b#_2]]
+  */
 }

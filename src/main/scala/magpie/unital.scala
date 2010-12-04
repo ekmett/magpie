@@ -12,10 +12,10 @@ object unital {
     def zero: m = m
   }
 
-  trait product[m,n] extends unital[(m,n)] with phantom.product[unital[m], unital[n]] {
+  trait product[m,n] extends unital[typed.product[m,n]] with phantom.product[unital[m], unital[n]] {
     def _1: unital[m]
     def _2: unital[n]
-    def zero: (m,n) = (_1.zero,_2.zero)
+    def zero: typed.product[m,n] = typed.product(_1.zero,_2.zero)
     override def dual: unital.product[m,n] = unital.product[m,n](_1.dual,_2.dual)
   } 
   object product {
