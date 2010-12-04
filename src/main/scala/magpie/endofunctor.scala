@@ -4,19 +4,12 @@ trait endofunctor[carrier<:hom.set,f[_>:carrier#inf<:carrier#sup]>:carrier#inf<:
   def carrier : category[carrier]
   override def dom : category[carrier] = carrier
   override def cod : category[carrier] = carrier
+
   override def dual : endofunctor[hom.set.dual[carrier], f] = endofunctor.op[carrier,f](this)
 
-  /* TODO: this really should be factored out like op */
-  def compose[g[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup](
+  /*overload*/ def compose[g[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup](
     that: endofunctor[carrier,g]
-  ) : endofunctor[carrier,({type λ[x>:carrier#inf<:carrier#sup] = f[g[x]]})#λ] =
-  new endofunctor[carrier,({type λ[x>:carrier#inf<:carrier#sup] = f[g[x]]})#λ] {
-    def carrier : category[carrier] = endofunctor.this.carrier
-    def apply[
-      a>:carrier#inf<:carrier#sup,
-      b>:carrier#inf<:carrier#sup
-    ](f: carrier#hom[a,b]): carrier#hom[f[g[a]],f[g[b]]] = endofunctor.this.apply[g[a],g[b]](that.apply[a,b](f))
-  }
+  ) = endofunctor.composition[carrier,f,g](this,that)
 }
 
 object endofunctor { 
@@ -45,10 +38,37 @@ object endofunctor {
     }
   }
 
+  trait composition[
+    carrier<:hom.set,
+    f[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup,
+    g[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup
+  ] extends functor.composition[carrier,carrier,carrier,f,g] 
+       with endofunctor[carrier,({type λ[x>:carrier#inf<:carrier#sup] = f[g[x]]})#λ] {
+    def carrier : category[carrier] = f.dom
+    override def dom : category[carrier] = carrier
+    override def cod : category[carrier] = carrier
+    protected def f : endofunctor[carrier, f]
+    protected def g : endofunctor[carrier, g]
+  }
+
+  object composition { 
+    def apply[
+      carrier<:hom.set,
+      f[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup,
+      g[_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup
+    ](
+      F : endofunctor[carrier,f],
+      G : endofunctor[carrier,g]
+    ) : composition[carrier,f,g] = 
+    new composition[carrier,f,g] {
+      protected def f : endofunctor[carrier,f] = F 
+      protected def g : endofunctor[carrier,g] = G
+    }
+  }
+
   def id[dom<:hom.set](implicit c: category[dom]): endofunctor[dom, ({type λ[x>:dom#inf<:dom#sup]=x})#λ] =
                                                new endofunctor[dom, ({type λ[x>:dom#inf<:dom#sup]=x})#λ] {
     def carrier : category[dom] = c
     def apply[a>:dom#inf<:dom#sup, b>:dom#inf<:dom#sup](f: dom#hom[a,b]): dom#hom[a,b] = f
   }
 }
-
