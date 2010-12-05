@@ -34,7 +34,7 @@ object endofunctor {
     ](
       f: endofunctor[carrier,f]
     ): op[carrier,f] = new op[carrier,f] { 
-      override def dual : endofunctor[hom.set.dual[hom.set.dual[carrier]],f] = witness(duality[carrier,f])(f)
+      override def dual : endofunctor[hom.set.dual[hom.set.dual[carrier]],f] = duality[carrier,f](f)
     }
   }
 

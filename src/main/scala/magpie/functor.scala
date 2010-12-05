@@ -31,7 +31,7 @@ object functor {
 
   object op {
     def apply[dom<:hom.set,cod<:hom.set, f[_>:dom#inf<:dom#sup]>:cod#inf<:cod#sup](f: functor[dom,cod,f]) : op[dom,cod,f] = new op[dom,cod,f] { 
-      override def dual : functor[dual[dual[dom]], dual[dual[cod]], f] = witness(duality[dom,cod,f])(f)
+      override def dual : functor[dual[dual[dom]], dual[dual[cod]], f] = duality[dom,cod,f](f)
     }
   }
 

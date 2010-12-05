@@ -50,7 +50,7 @@ object groupoid {
     def duality[m<:hom.set,n<:hom.set] 
     : groupoid[hom.set.product[hom.set.dual[m],hom.set.dual[n]]] <~<
       groupoid[hom.set.dual[hom.set.product[m,n]]] = 
-      hom.set.product.duality[m,n].lift[Nothing,Any,({type λ[+x<:hom.set] = groupoid[x]})#λ]
+      hom.set.product.duality[m,n].colift[Nothing,Any,({type λ[+x<:hom.set] = groupoid[x]})#λ]
   }
 }
 

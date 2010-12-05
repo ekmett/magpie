@@ -10,7 +10,7 @@ object typed {
   }
 
   object product { 
-    implicit def to[x,y](p: (x,y)): product[x,y] = product(p._1,p._2)
-    implicit def from[x,y](p: product[x,y]): (x,y) = (p._1, p._2)
+    implicit def toTypedProduct[x,y](p: (x,y)): product[x,y] = product(p._1,p._2)
+    implicit def fromTypedProduct[x,y](p: product[x,y]): (x,y) = (p._1, p._2)
   }
 }

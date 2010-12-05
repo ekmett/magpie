@@ -38,8 +38,9 @@ object category {
     import subtype.{ <~< }
     def duality[m<:hom.set,n<:hom.set] 
     : category[hom.set.product[hom.set.dual[m],hom.set.dual[n]]] <~<
-      category[hom.set.dual[hom.set.product[m,n]]] = 
-      hom.set.product.duality[m,n].lift[Nothing,Any,({type λ[+x<:hom.set] = category[x]})#λ]
+      category[hom.set.dual[hom.set.product[m,n]]] = {
+      hom.set.product.duality[m,n].colift[Nothing,Any,({type λ[+x<:hom.set] = category[x]})#λ] 
+    }
   }
 }
 
