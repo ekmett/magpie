@@ -2,43 +2,38 @@ package magpie
 
 /** currently these play the roles of both hom-classes and hom-sets */
 object hom { 
-//  import equality._
-  /** hom-sets are modeled as a range of types. 
-    * sealed to ensure the validity of the duality laws 
-    * and that it is never actually constructed
-    */
+
   sealed trait set { self => 
-    type obinf
-    type obsup >: obinf
-    type ob[-_>:obinf<:obsup,+_>:obinf<:obsup]
-    type inf = ob[obsup,obinf]
-    type sup = ob[obinf,obsup]
-    type hom[-_>:inf<:sup,+_>:inf<:sup] 
+    type inf
+    type sup >: inf
+    type dihom[-_>:inf<:sup,+_>:inf<:sup,-_>:inf<:sup,+_>:inf<:sup]
   }
+
+  type C[t<:set,a>:t#inf<:t#sup,b>:t#inf<:t#sup] = t#dihom[a,a,b,b]
 
   object set {
     /** the dual of a hom-set is a hom-set */
     type dual[h<:set] = set { 
-			type obinf = h#obinf
-      type obsup = h#obsup
-      type ob[-a>:obinf<:obsup,+b>:obinf<:obsup] = h#ob[b,a]
       type inf = h#inf
       type sup = h#sup
-      type hom[-a>:inf<:sup,+b>:inf<:sup] = h#hom[b,a]
+      type dihom[-a>:inf<:sup,+b>:inf<:sup,-c>:inf<:sup,+d>:inf<:sup] = h#dihom[c,d,a,b]
     }
 
     /** hom.set.of: convenient accessor to construct a particular hom.set */
-    type of[l, h>:l, o[-_>:l<:h,+_>:l<:h], c[-_>:o[h,l]<:o[l,h],+_>:o[h,l]<:o[l,h]]] = set {
-      type obinf = l
-      type obsup = h
-      type ob[-a>:obinf<:obsup,+b>:obinf<:obsup] = o[a,b]
-      type inf = ob[obsup,obinf]
-      type sup = ob[obinf,obsup]
-      type hom[-a>:inf<:sup,+b>:inf<:sup] = c[a,b]
+    type of[l, h>:l, C[-_>:l<:h,+_>:l<:h,-_>:l<:h,+_>:l<:h]] = set {
+      type inf = l
+      type sup = h
+      type dihom[-a>:inf<:sup,+b>:inf<:sup,-c>:inf<:sup,+d>:inf<:sup] = C[a,b,c,d]
     }
 
     /** hom.set.singleton: creates a hom-set that consists of a single type */
-    type singleton[z] = of[z,z,({type λ[-x>:z<:z,+y>:z<:z]=z})#λ,({type λ[-x>:z<:z,+y>:z<:z] = z})#λ]
+    type singleton[z] = of[z,z,({type λ[-a>:z<:z,+b>:z<:z,-c>:z<:z,+d>:z<:z] = z})#λ]
+
+    type scala = set { 
+      type inf = Nothing
+      type sup = Any
+      type dihom[-a>:inf<:sup,+b>:inf<:sup,-c>:inf<:sup,+d>:inf<:sup] = a => d
+    }
 
     /** hom.set.duality: hack to witness the equality of a hom-set to its dual dual */
     def duality[h<:set] : equality[Nothing,set,h,dual[dual[h]]] = 
@@ -46,32 +41,20 @@ object hom {
 
     /** hom.set.product: the product of two hom-sets */
     type product[x<:set,y<:set] = set { 
-      type obinf = typed.product[x#obinf,y#obinf]
-      type obsup = typed.product[x#obsup,y#obsup]
-      type ob[-a>:obinf<:obsup,+b>:obinf<:obsup] = typed.product[x#ob [a#_1,b#_1], y#ob [a#_2,b#_2]]
-
-      // busted:
-      // type inf = ob[obsup,obinf]// -- compiler bug. see reasoning
-      // type sup = ob[obinf,obsup]
-
-      // the full expansion doesn't work at all:
-      // type inf = typed.product[x#ob[x#obsup,x#obinf], y#ob[y#obsup, y#obinf]]
-      // type sup = typed.product[x#ob[x#obinf,x#obsup], y#ob[y#obinf, y#obsup]]
-
-      // works until instantiation:
       type inf = typed.product[x#inf,y#inf]
       type sup = typed.product[x#sup,y#sup]
-      type hom[-a>:inf<:sup,+b>:inf<:sup] = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]]
+      type dihom[-a>:inf<:sup,+b>:inf<:sup,-c>:inf<:sup,+d>:inf<:sup] = typed.product[x#dihom[a#_1,b#_1,c#_1,d#_1], y#dihom[a#_2,b#_2,c#_2,d#_2]]
     }
+
     object product { 
       def hom[
         x<:set,y<:set,
         a>:typed.product[x#inf,y#inf]<:typed.product[x#sup,y#sup],
         b>:typed.product[x#inf,y#inf]<:typed.product[x#sup,y#sup]
       ] (
-        l: x#hom[a#_1,b#_1],
-        r: y#hom[a#_2,b#_2]
-      ) = typed.product[x#hom[a#_1,b#_1], y#hom[a#_2,b#_2]](l,r)
+        l: C[x,a#_1,b#_1],
+        r: C[y,a#_2,b#_2]
+      ) = typed.product[C[x,a#_1,b#_1], C[y,a#_2,b#_2]](l,r)
       /** hom.set.product.duality: another bald-faced assertion about duality. */
       def duality[x <: set, y <: set] : subtype[Nothing,set,product[dual[x],dual[y]],dual[product[x,y]]] = 
         subtype.refl[product[dual[x],dual[y]]].asInstanceOf[subtype[Nothing,set, product[dual[x],dual[y]], dual[product[x,y]]]]
