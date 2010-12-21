@@ -5,14 +5,14 @@ trait bifunctor[
   l<:hom.set,
   r<:hom.set,
   cod<:hom.set,
-  f[_>:hom.set.product[l,r]#inf<:hom.set.product[l,r]#sup]>:cod#inf<:cod#sup
+  f[+_>:hom.set.product[l,r]#inf<:hom.set.product[l,r]#sup]>:cod#inf<:cod#sup
 ] extends 
       functor[hom.set.product[l,r],cod,f] {
   type dom = hom.set.product[l,r]
   def dom : category.product[l,r]
 
-  type _1[b>:r#inf<:r#sup] = functor[l,cod,({type λ[x>:l#inf<:l#sup] = f[typed.product[x,b]]})#λ] 
-  type _2[a>:l#inf<:l#sup] = functor[r,cod,({type λ[x>:r#inf<:r#sup] = f[typed.product[a,x]]})#λ]
+  type _1[b>:r#inf<:r#sup] = functor[l,cod,({type λ[+x>:l#inf<:l#sup] = f[typed.product[x,b]]})#λ] 
+  type _2[a>:l#inf<:l#sup] = functor[r,cod,({type λ[+x>:r#inf<:r#sup] = f[typed.product[a,x]]})#λ]
 
   def _1[b>:r#inf<:r#sup] : _1[b]
   def _2[a>:l#inf<:l#sup] : _2[a]
