@@ -69,6 +69,11 @@ object endofunctor {
   def id[dom<:hom.set](implicit c: category[dom]): endofunctor[dom, ({type λ[+x>:dom#inf<:dom#sup]=x})#λ] =
                                                new endofunctor[dom, ({type λ[+x>:dom#inf<:dom#sup]=x})#λ] {
     def carrier : category[dom] = c
-    def apply[a>:dom#inf<:dom#sup, b>:dom#inf<:dom#sup](f: hom.C[dom,a,b]): hom.C[dom,a,b] = f
+    def apply[
+      a>:dom#inf<:dom#sup,
+      b>:dom#inf<:dom#sup,
+      c>:dom#inf<:dom#sup,
+      d>:dom#inf<:dom#sup
+    ](f: dom#dihom[a,b,c,d]): dom#dihom[a,b,c,d] = f
   }
 }

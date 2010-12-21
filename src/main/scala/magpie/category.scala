@@ -42,5 +42,10 @@ object category {
       hom.set.product.duality[m,n].colift[Nothing,Any,({type λ[+x<:hom.set] = category[x]})#λ] 
     }
   }
+
+  object scala extends category[hom.set.scala] { 
+    def id[A] : A => A = (x: A) => x
+    def compose[A,B,C](f: B => C, g: A => B): A => C = (a: A) => f(g(a))
+  }
 }
 

@@ -3,7 +3,12 @@ package magpie
 trait functor[dom<:hom.set,cod<:hom.set,f[+_>:dom#inf<:dom#sup]>:cod#inf<:cod#sup] {
   def dom : category[dom]
   def cod : category[cod]
-  def apply[a>:dom#inf<:dom#sup, b>:dom#inf<:dom#sup](f: dom#dihom[a,a,b,b]): cod#dihom[f[a],f[a],f[b],f[b]]
+  def apply[
+    a>:dom#inf<:dom#sup,
+    b>:dom#inf<:dom#sup,
+    c>:dom#inf<:dom#sup,
+    d>:dom#inf<:dom#sup
+  ](f: dom#dihom[a,b,c,d]): cod#dihom[f[a],f[b],f[c],f[d]]
 
   def dual : functor[hom.set.dual[dom], hom.set.dual[cod], f] = functor.op[dom,cod,f](this)
   def compose[pre<:hom.set,g[+_>:pre#inf<:pre#sup]>:dom#inf<:dom#sup](
@@ -26,7 +31,12 @@ object functor {
   trait op[dom<:hom.set, cod<:hom.set, f[+_>:dom#inf<:dom#sup]>:cod#inf<:cod#sup] extends functor[hom.set.dual[dom], hom.set.dual[cod], f] {
     def dom : category[hom.set.dual[dom]] = dual.dom.dual
     def cod : category[hom.set.dual[cod]] = dual.cod.dual
-    def apply[a>:dom#inf<:dom#sup, b>:dom#inf<:dom#sup](f: dom#dihom[b,b,a,a]): cod#dihom[f[b],f[b],f[a],f[a]] = dual[b,a](f)
+    def apply[
+      a>:dom#inf<:dom#sup,
+      b>:dom#inf<:dom#sup,
+      c>:dom#inf<:dom#sup,
+      d>:dom#inf<:dom#sup
+    ](f: dom#dihom[c,d,a,b]): cod#dihom[f[c],f[d],f[a],f[b]] = dual[c,d,a,b](f)
   }
 
   object op {
@@ -48,8 +58,10 @@ object functor {
     def cod : category[c] = f.cod
     def apply[
       A>:a#inf<:a#sup, 
-      B>:a#inf<:a#sup
-    ](h: a#dihom[A,A,B,B]): c#dihom[f[g[A]],f[g[A]],f[g[B]],f[g[B]]] = f(g(h))
+      B>:a#inf<:a#sup,
+      C>:a#inf<:a#sup,
+      D>:a#inf<:a#sup
+    ](h: a#dihom[A,B,C,D]): c#dihom[f[g[A]],f[g[B]],f[g[C]],f[g[D]]] = f(g(h))
   }
 
   object composition { 

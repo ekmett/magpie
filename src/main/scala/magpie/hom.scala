@@ -9,7 +9,7 @@ object hom {
     type dihom[-_>:inf<:sup,+_>:inf<:sup,-_>:inf<:sup,+_>:inf<:sup]
   }
 
-  type C[t<:set,a>:t#inf<:t#sup,b>:t#inf<:t#sup] = t#dihom[a,a,b,b]
+  type C[+t<:set,a>:t#inf<:t#sup,b>:t#inf<:t#sup] = t#dihom[a,a,b,b]
 
   object set {
     /** the dual of a hom-set is a hom-set */
