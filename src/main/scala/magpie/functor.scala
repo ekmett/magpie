@@ -5,10 +5,8 @@ trait functor[dom<:hom.set,cod<:hom.set,f[+_>:dom#inf<:dom#sup]>:cod#inf<:cod#su
   def cod : category[cod]
   def apply[
     a>:dom#inf<:dom#sup,
-    b>:dom#inf<:dom#sup,
-    c>:dom#inf<:dom#sup,
-    d>:dom#inf<:dom#sup
-  ](f: dom#dihom[a,b,c,d]): cod#dihom[f[a],f[b],f[c],f[d]]
+    b>:dom#inf<:dom#sup
+  ](f: hom.C[dom,a,b]): hom.C[cod,f[a],f[b]]
 
   def dual : functor[hom.set.dual[dom], hom.set.dual[cod], f] = functor.op[dom,cod,f](this)
   def compose[pre<:hom.set,g[+_>:pre#inf<:pre#sup]>:dom#inf<:dom#sup](
@@ -33,10 +31,8 @@ object functor {
     def cod : category[hom.set.dual[cod]] = dual.cod.dual
     def apply[
       a>:dom#inf<:dom#sup,
-      b>:dom#inf<:dom#sup,
-      c>:dom#inf<:dom#sup,
-      d>:dom#inf<:dom#sup
-    ](f: dom#dihom[c,d,a,b]): cod#dihom[f[c],f[d],f[a],f[b]] = dual[c,d,a,b](f)
+      b>:dom#inf<:dom#sup
+    ](f: hom.C[dom,b,a]): hom.C[cod,f[b],f[a]] = dual[b,a](f)
   }
 
   object op {
@@ -58,10 +54,8 @@ object functor {
     def cod : category[c] = f.cod
     def apply[
       A>:a#inf<:a#sup, 
-      B>:a#inf<:a#sup,
-      C>:a#inf<:a#sup,
-      D>:a#inf<:a#sup
-    ](h: a#dihom[A,B,C,D]): c#dihom[f[g[A]],f[g[B]],f[g[C]],f[g[D]]] = f(g(h))
+      B>:a#inf<:a#sup
+    ](h: hom.C[a,A,B]): hom.C[c,f[g[A]],f[g[B]]] = f(g(h))
   }
 
   object composition { 

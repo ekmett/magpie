@@ -1,0 +1,4 @@
+import magpie._
+
+val crash = bifunctor.tuple.bimap[Int,Int,Int,Int](category.scala.id[Int], category.scala.id[Int])
+// crash(12,23)

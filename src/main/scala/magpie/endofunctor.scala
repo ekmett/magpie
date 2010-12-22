@@ -1,5 +1,7 @@
 package magpie
 
+/*
+
 trait endofunctor[carrier<:hom.set,f[+_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup] extends functor[carrier,carrier,f] { 
   def carrier : category[carrier]
   override def dom : category[carrier] = carrier
@@ -7,7 +9,7 @@ trait endofunctor[carrier<:hom.set,f[+_>:carrier#inf<:carrier#sup]>:carrier#inf<
 
   override def dual : endofunctor[hom.set.dual[carrier], f] = endofunctor.op[carrier,f](this)
 
-  /*overload*/ def compose[g[+_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup](
+  def compose[g[+_>:carrier#inf<:carrier#sup]>:carrier#inf<:carrier#sup](
     that: endofunctor[carrier,g]
   ) = endofunctor.composition[carrier,f,g](this,that)
 }
@@ -77,3 +79,5 @@ object endofunctor {
     ](f: dom#dihom[a,b,c,d]): dom#dihom[a,b,c,d] = f
   }
 }
+
+*/
